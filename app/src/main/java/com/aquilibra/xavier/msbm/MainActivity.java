@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -18,18 +19,22 @@ import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -37,7 +42,7 @@ import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends Activity {
 
-    private WebView mWebView;
+    HTML5WebView mWebView;
     String fileName;
     private LinearLayout mContentView;
     private FrameLayout mCustomViewContainer;
@@ -46,36 +51,64 @@ public class MainActivity extends Activity {
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mWebView = new HTML5WebView(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFEB3B")));
-        mWebView = (WebView) findViewById(R.id.activity_main_webview);
-        WebSettings webSettings = mWebView.getSettings();
-        mWebView.setInitialScale(1);
-        mWebView.getSettings().setLoadWithOverviewMode(true);
-        mWebView.getSettings().setUseWideViewPort(true);
+        //mWebView = (HTML5WebView) findViewById(R.id.activity_main_webview);
+        //WebSettings webSettings = mWebView.getSettings();
+        //mWebView.getSettings().setLoadWithOverviewMode(true);
+        //mWebView.getSettings().setUseWideViewPort(true);
+        mWebView.setBackgroundColor(Color.YELLOW);
+        mWebView.setBackgroundResource(R.drawable.nsplash);
+        mWebView.getSettings().setAppCacheEnabled(true);
+        mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         mWebView.setScrollbarFadingEnabled(false);
-        //mWebView.setWebViewClient(new HelloWebViewClient(){});
-        mWebView.loadUrl("http://kurogo.artuvic.com:8010/home/");
         mWebView.setWebViewClient(new HelloWebViewClient());
-        webSettings.setJavaScriptEnabled(true);
         DowlonadListen dlist = new DowlonadListen(this);
         mWebView.setDownloadListener(dlist);
-        registerReceiver(onComplete,new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+        mWebView.loadUrl("http://kurogo.artuvic.com:8010/home/");
+        setContentView(mWebView.getLayout());
+        /* Adds Progrss bar Support
+        this.getWindow().requestFeature(Window.FEATURE_PROGRESS);
+        setContentView(R.layout.activity_main);
+        // Makes Progress bar Visible
+        getWindow().setFeatureInt( Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON);
+
+        // Sets the Chrome Client, and defines the onProgressChanged
+        // This makes the Progress bar be updated.
+        final Activity MyActivity = this;
+        mWebView.setWebChromeClient(new WebChromeClient() {
+            public void onProgressChanged(WebView view, int progress)
+            {
+                //Make the bar disappear after URL is loaded, and changes string to Loading...
+                MyActivity.setTitle("Loading...");
+                MyActivity.setProgress(progress * 100); //Make the bar disappear after URL is loaded
+
+                // Return the app name after finish loading
+                if(progress == 100)
+                    MyActivity.setTitle(R.string.app_name);
+            }
+        });*/
+
     }
 
-    private class DowlonadListen implements DownloadListener{
-            Context context;
-            public DowlonadListen(Context context){
-                this.context = context;
+    private class DowlonadListen implements DownloadListener {
+        Context context;
 
-            }
+        public DowlonadListen(Context context) {
+            this.context = context;
 
-            public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-                //for downloading directly through download manager
+        }
+
+        public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+            //for downloading directly through download manager
                 /*DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
                 request.allowScanningByMediaScanner();
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
@@ -83,24 +116,24 @@ public class MainActivity extends Activity {
                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "filedownload.pdf");
                 DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                 dm.enqueue(request);*/
-                String result = null;
-                try {
-                    result = java.net.URLDecoder.decode(url, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                fileName = result.substring(result.lastIndexOf('/')+1,result.indexOf('?'));
-                FileDownloader fdown = new FileDownloader(context);
-                File file = new File(Environment.getExternalStoragePublicDirectory("/MSBM")
-                        +"/files/"+ fileName);
-                //Toast.makeText(this.context,result,Toast.LENGTH_LONG).show();
-                if (file.exists()) {
-                    FileOpener.openFile(file,this.context);
-                }else{
-                    fdown.download(url, "/files/", fileName);
-                    //Toast.makeText(this.context,fileName,Toast.LENGTH_LONG).show();
-                }
+            String result = null;
+            try {
+                result = java.net.URLDecoder.decode(url, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
             }
+            fileName = result.substring(result.lastIndexOf('/') + 1, result.indexOf('?'));
+            FileDownloader fdown = new FileDownloader(context);
+            File file = new File(Environment.getExternalStoragePublicDirectory("/MSBM")
+                    + "/files/" + fileName);
+            //Toast.makeText(this.context,result,Toast.LENGTH_LONG).show();
+            if (file.exists()) {
+                FileOpener.openFile(file, this.context);
+            } else {
+                fdown.download(url, "/files/", fileName);
+                //Toast.makeText(this.context,fileName,Toast.LENGTH_LONG).show();
+            }
+        }
 
 
     }
@@ -108,9 +141,9 @@ public class MainActivity extends Activity {
     private class HelloWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView webview, String url) {
-            mWebView.setWebChromeClient(new WebChromeClient() {
+            //mWebView.setWebChromeClient(new WebChromeClient() {
 
-                private View mCustomView;
+        /*private View mCustomView;
 
                 @Override
                 public void onShowCustomView(View view, WebChromeClient.CustomViewCallback callback) {
@@ -131,9 +164,8 @@ public class MainActivity extends Activity {
                     // Finally show the custom view container.
                     mCustomViewContainer.setVisibility(View.VISIBLE);
                     mCustomViewContainer.bringToFront();
-                }
+                }*/
 
-            });
 
             if (url.startsWith("tel:")) {
 
@@ -141,16 +173,19 @@ public class MainActivity extends Activity {
 
                 startActivity(intent);
             } else if (url.startsWith("http:") || url.startsWith("https:")) {
-                webview.loadUrl(url);
+                mWebView.loadUrl(url);
             }
             return true;
         }
+
+
 
         @Override
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             mWebView.loadUrl("file:///android_asset/index.html");
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -174,6 +209,52 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    //New Back Method
+    /*@Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // Check if the key event was the Back button and if there's history
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+            Toast.makeText(this,mWebView.getUrl(),Toast.LENGTH_LONG).show();
+            if (mWebView.canGoBack()) {
+                if (mWebView.getUrl().contains("kurogo.artuvic.com:8010/home")) {
+                    new AlertDialog.Builder(this)
+                            .setTitle("Exit!")
+                            .setMessage("Are you sure you want to close?")
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                    return true;
+                } else {
+                    mWebView.goBack();
+                    return true;
+                }
+            } else {
+                new AlertDialog.Builder(this)
+                        .setTitle("Exit!")
+                        .setMessage("Are you sure you want to close?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }*/
 
     @Override
     public void onBackPressed() {
@@ -212,15 +293,13 @@ public class MainActivity extends Activity {
         }
     }
 
-    //public void showPdf(){
 
-
-    BroadcastReceiver onComplete = new BroadcastReceiver() {
-        public void onReceive(Context ctxt, Intent intent) {
-            Toast.makeText(ctxt, "Download Complete", Toast.LENGTH_LONG).show();
-            File file = new File(Environment.getExternalStoragePublicDirectory("/MSBM")
-                    +"/files/"+ fileName);
-            FileOpener.openFile(file, ctxt);
+        BroadcastReceiver onComplete = new BroadcastReceiver() {
+            public void onReceive(Context ctxt, Intent intent) {
+                Toast.makeText(ctxt, "Download Complete", Toast.LENGTH_LONG).show();
+                File file = new File(Environment.getExternalStoragePublicDirectory("/MSBM")
+                        + "/files/" + fileName);
+                FileOpener.openFile(file, ctxt);
            /* Uri uri = Uri.fromFile(file);
             try {
                 Intent intentUrl = new Intent(Intent.ACTION_VIEW);
@@ -231,7 +310,9 @@ public class MainActivity extends Activity {
                 Toast.makeText(ctxt, "Cant Open File", Toast.LENGTH_LONG).show();
             }
         }*/
-        }
-    };
+            }
+        };
+
 }
+
 
