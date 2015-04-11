@@ -62,8 +62,8 @@ public class MainActivity extends Activity {
         //WebSettings webSettings = mWebView.getSettings();
         //mWebView.getSettings().setLoadWithOverviewMode(true);
         //mWebView.getSettings().setUseWideViewPort(true);
-        mWebView.setBackgroundColor(Color.YELLOW);
-        mWebView.setBackgroundResource(R.drawable.nsplash);
+        //mWebView.setBackgroundColor(Color.YELLOW);
+        //mWebView.setBackgroundResource(R.drawable.nsplash);
         mWebView.getSettings().setAppCacheEnabled(true);
         mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
@@ -211,12 +211,12 @@ public class MainActivity extends Activity {
 
 
     //New Back Method
-    /*@Override
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // Check if the key event was the Back button and if there's history
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-            Toast.makeText(this,mWebView.getUrl(),Toast.LENGTH_LONG).show();
-            if (mWebView.canGoBack()) {
+            //Toast.makeText(this,mWebView.getUrl(),Toast.LENGTH_LONG).show();
+             if (mWebView.canGoBack()) {
                 if (mWebView.getUrl().contains("kurogo.artuvic.com:8010/home")) {
                     new AlertDialog.Builder(this)
                             .setTitle("Exit!")
@@ -254,9 +254,9 @@ public class MainActivity extends Activity {
             }
         }
         return super.onKeyDown(keyCode, event);
-    }*/
+    }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
         if (mWebView.canGoBack()) {
             if (mWebView.getUrl().contains("kurogo.artuvic.com:8010/home")) {
@@ -291,7 +291,7 @@ public class MainActivity extends Activity {
                     .setNegativeButton("No", null)
                     .show();
         }
-    }
+    }*/
 
 
         BroadcastReceiver onComplete = new BroadcastReceiver() {

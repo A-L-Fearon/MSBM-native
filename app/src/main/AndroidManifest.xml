@@ -8,8 +8,7 @@
     <application
         android:hardwareAccelerated="true"
         android:allowBackup="true"
-        android:icon="@drawable/nicon"
-        android:logo="@drawable/nicon"
+        android:icon="@drawable/newicon"
         android:label="Mona School of Business and Management"
         android:theme="@style/AppTheme" >
         <activity

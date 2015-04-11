@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -13,21 +14,21 @@ import java.util.TimerTask;
 
 
 public class SplashActivity extends Activity {
-    private long splashDelay = 0; //5 seconds
+    //private long splashDelay = 0; //5 seconds
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-       /* new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(SplashActivity.this,MainActivity.class);
                 SplashActivity.this.startActivity(intent);
                 SplashActivity.this.finish();
             }
-        },2000); */
-        TimerTask task = new TimerTask()
+        },5000);
+        /*TimerTask task = new TimerTask()
         {
 
             @Override
@@ -41,7 +42,7 @@ public class SplashActivity extends Activity {
         };
 
         Timer timer = new Timer();
-        timer.schedule(task, splashDelay);
+        timer.schedule(task, splashDelay); */
 
     }
 
@@ -67,4 +68,19 @@ public class SplashActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+                finish();
+                android.os.Process.killProcess(android.os.Process.myPid());
+                super.onDestroy();
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
+
+    }
+
+
 }
+
