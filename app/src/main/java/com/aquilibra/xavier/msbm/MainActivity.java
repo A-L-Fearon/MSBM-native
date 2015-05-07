@@ -72,8 +72,10 @@ public class MainActivity extends Activity {
         DowlonadListen dlist = new DowlonadListen(this);
         mWebView.setDownloadListener(dlist);
         registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-
-        mWebView.loadUrl("http://kurogo.artuvic.com:8010/home/");
+        
+        //Old Site
+        //mWebView.loadUrl("http://kurogo.artuvic.com:8010/home/");
+        mWebView.loadUrl("http://m.msbm-uwi.org/");
         setContentView(mWebView.getLayout());
         /* Adds Progrss bar Support
         this.getWindow().requestFeature(Window.FEATURE_PROGRESS);
