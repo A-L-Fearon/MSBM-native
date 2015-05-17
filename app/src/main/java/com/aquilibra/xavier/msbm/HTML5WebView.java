@@ -15,6 +15,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 
 public class HTML5WebView extends WebView {
@@ -28,6 +30,12 @@ public class HTML5WebView extends WebView {
     private FrameLayout                         mContentView;
     private FrameLayout                         mBrowserFrameLayout;
     private FrameLayout                         mLayout;
+
+  /*  //Progress Bar
+    final ProgressBar Pbar = (ProgressBar)findViewById(R.id.progressView);
+    final TextView txtview = (TextView)findViewById(R.id.textView);
+*/
+
 
     static final String LOGTAG = "HTML5WebView";
 
@@ -55,10 +63,19 @@ public class HTML5WebView extends WebView {
         setInitialScale(1);
         mWebChromeClient = new MyWebChromeClient();
         setWebChromeClient(mWebChromeClient);
+        // request the progress-bar feature for the activity
 
-        setWebViewClient(new WebViewClient());
 
-setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+       /* setWebViewClient(new WebViewClient(){
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                progess.setVisibility(View.VISIBLE);
+            }
+            public void onPageFinished(WebView view, String url) {
+                progess.setVisibility(View.GONE);
+            }
+        });*/
+
+        setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 
         // enable navigator.geolocation 
        // s.setGeolocationEnabled(true);
@@ -167,9 +184,20 @@ setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
             ((Activity) mContext).setTitle(title);
          }
 
+
          @Override
          public void onProgressChanged(WebView view, int newProgress) {
-             ((Activity) mContext).getWindow().setFeatureInt(Window.FEATURE_PROGRESS, newProgress*100);
+            ((Activity) mContext).getWindow().setFeatureInt(Window.FEATURE_PROGRESS, newProgress * 100);
+           /* //PROGRESS BAR
+             if(newProgress < 100 && Pbar.getVisibility() == ProgressBar.GONE){
+                 Pbar.setVisibility(ProgressBar.VISIBLE);
+                 txtview.setVisibility(View.VISIBLE);
+             }
+             Pbar.setProgress(newProgress);
+             if(newProgress == 100) {
+                 Pbar.setVisibility(ProgressBar.GONE);
+                 txtview.setVisibility(View.GONE);
+             }*/
          }
 
          @Override

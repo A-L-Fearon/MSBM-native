@@ -1,11 +1,9 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:a="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFEB3B"
-
-    >
+    android:background="#FFEB3B">
 
     <WebView
         android:id="@+id/activity_main_webview"
@@ -18,5 +16,20 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+    <TextView android:id="@+id/textView"
+        android:text="Loading, please wait . . ."
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textColor="#000000"/>
 
-</LinearLayout>
+    <ProgressBar android:id="@+id/progressView"
+        style="?android:attr/progressBarStyleHorizontal" android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:layout_centerVertical="true"
+        android:padding="2dip"
+        android:layout_centerInParent="true">
+    </ProgressBar>
+
+</RelativeLayout>
+
+

@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,9 +31,12 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -44,26 +48,19 @@ public class MainActivity extends Activity {
 
     HTML5WebView mWebView;
     String fileName;
-    private LinearLayout mContentView;
+
+    /*private LinearLayout mContentView;
     private FrameLayout mCustomViewContainer;
     private WebChromeClient.CustomViewCallback mCustomViewCallback;
     FrameLayout.LayoutParams COVER_SCREEN_GRAVITY_CENTER = new FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);
-
+            ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mWebView = new HTML5WebView(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFEB3B")));
-        //mWebView = (HTML5WebView) findViewById(R.id.activity_main_webview);
-        //WebSettings webSettings = mWebView.getSettings();
-        //mWebView.getSettings().setLoadWithOverviewMode(true);
-        //mWebView.getSettings().setUseWideViewPort(true);
-        //mWebView.setBackgroundColor(Color.YELLOW);
-        //mWebView.setBackgroundResource(R.drawable.nsplash);
         mWebView.getSettings().setAppCacheEnabled(true);
         mWebView.getSettings().setDomStorageEnabled(true);
         mWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
@@ -72,12 +69,13 @@ public class MainActivity extends Activity {
         DowlonadListen dlist = new DowlonadListen(this);
         mWebView.setDownloadListener(dlist);
         registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-        
+
         //Old Site
         //mWebView.loadUrl("http://kurogo.artuvic.com:8010/home/");
         mWebView.loadUrl("http://m.msbm-uwi.org/");
         setContentView(mWebView.getLayout());
-        /* Adds Progrss bar Support
+
+       /* // Adds Progress bar Support
         this.getWindow().requestFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.activity_main);
         // Makes Progress bar Visible
@@ -99,6 +97,7 @@ public class MainActivity extends Activity {
             }
         });*/
 
+
     }
 
     private class DowlonadListen implements DownloadListener {
@@ -110,7 +109,7 @@ public class MainActivity extends Activity {
         }
 
         public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-            //for downloading directly through download manager
+            //For downloading directly through download manager
                 /*DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
                 request.allowScanningByMediaScanner();
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
@@ -118,6 +117,7 @@ public class MainActivity extends Activity {
                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "filedownload.pdf");
                 DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                 dm.enqueue(request);*/
+
             String result = null;
             try {
                 result = java.net.URLDecoder.decode(url, "UTF-8");
@@ -143,31 +143,6 @@ public class MainActivity extends Activity {
     private class HelloWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView webview, String url) {
-            //mWebView.setWebChromeClient(new WebChromeClient() {
-
-        /*private View mCustomView;
-
-                @Override
-                public void onShowCustomView(View view, WebChromeClient.CustomViewCallback callback) {
-                    // if a view already exists then immediately terminate the new one
-                    if (mCustomView != null) {
-                        callback.onCustomViewHidden();
-                        return;
-                    }
-
-                    // Add the custom view to its container.
-                    mCustomViewContainer.addView(view, COVER_SCREEN_GRAVITY_CENTER);
-                    mCustomView = view;
-                    mCustomViewCallback = callback;
-
-                    // hide main browser view
-                    mContentView.setVisibility(View.GONE);
-
-                    // Finally show the custom view container.
-                    mCustomViewContainer.setVisibility(View.VISIBLE);
-                    mCustomViewContainer.bringToFront();
-                }*/
-
 
             if (url.startsWith("tel:")) {
 
@@ -186,6 +161,8 @@ public class MainActivity extends Activity {
         public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
             mWebView.loadUrl("file:///android_asset/index.html");
         }
+
+
     }
 
 
