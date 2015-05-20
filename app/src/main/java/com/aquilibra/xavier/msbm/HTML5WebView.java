@@ -1,10 +1,10 @@
 package com.aquilibra.xavier.msbm;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +13,8 @@ import android.webkit.GeolocationPermissions;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+
 
 
 public class HTML5WebView extends WebView {
@@ -31,17 +29,14 @@ public class HTML5WebView extends WebView {
     private FrameLayout                         mBrowserFrameLayout;
     private FrameLayout                         mLayout;
 
-  /*  //Progress Bar
-    final ProgressBar Pbar = (ProgressBar)findViewById(R.id.progressView);
-    final TextView txtview = (TextView)findViewById(R.id.textView);
-*/
-
+    Activity a;
+    ProgressDialog progressDialog;
 
     static final String LOGTAG = "HTML5WebView";
 
     private void init(Context context) {
         mContext = context;     
-        Activity a = (Activity) mContext;
+        a = (Activity) mContext;
 
         mLayout = new FrameLayout(context);
 
@@ -63,18 +58,6 @@ public class HTML5WebView extends WebView {
         setInitialScale(1);
         mWebChromeClient = new MyWebChromeClient();
         setWebChromeClient(mWebChromeClient);
-        // request the progress-bar feature for the activity
-
-
-       /* setWebViewClient(new WebViewClient(){
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                progess.setVisibility(View.VISIBLE);
-            }
-            public void onPageFinished(WebView view, String url) {
-                progess.setVisibility(View.GONE);
-            }
-        });*/
-
         setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 
         // enable navigator.geolocation 
@@ -85,6 +68,10 @@ public class HTML5WebView extends WebView {
         s.setDomStorageEnabled(true);
 
         mContentView.addView(this);
+
+        //For Progress Dialog
+        progressDialog = new ProgressDialog(a);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
     }
 
     public HTML5WebView(Context context) {
@@ -113,17 +100,6 @@ public class HTML5WebView extends WebView {
     public void hideCustomView() {
         mWebChromeClient.onHideCustomView();
     }
-
-    /*@Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if ((mCustomView == null) && canGoBack()){
-                goBack();
-                return true;
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }*/
 
     private class MyWebChromeClient extends WebChromeClient {
         private Bitmap      mDefaultVideoPoster;
@@ -188,16 +164,16 @@ public class HTML5WebView extends WebView {
          @Override
          public void onProgressChanged(WebView view, int newProgress) {
             ((Activity) mContext).getWindow().setFeatureInt(Window.FEATURE_PROGRESS, newProgress * 100);
-           /* //PROGRESS BAR
-             if(newProgress < 100 && Pbar.getVisibility() == ProgressBar.GONE){
-                 Pbar.setVisibility(ProgressBar.VISIBLE);
-                 txtview.setVisibility(View.VISIBLE);
-             }
-             Pbar.setProgress(newProgress);
-             if(newProgress == 100) {
-                 Pbar.setVisibility(ProgressBar.GONE);
-                 txtview.setVisibility(View.GONE);
-             }*/
+             // Functionality for Progress Dialog
+             progressDialog.show();
+             progressDialog.setProgress(0);
+             a.setProgress(newProgress * 1000);
+
+             progressDialog.incrementProgressBy(newProgress);
+
+             if(newProgress == 100 && progressDialog.isShowing()){
+                 progressDialog.dismiss();
+            }
          }
 
          @Override

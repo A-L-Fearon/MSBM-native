@@ -1,42 +1,28 @@
 package com.aquilibra.xavier.msbm;
 
-import android.annotation.TargetApi;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -48,13 +34,6 @@ public class MainActivity extends Activity {
 
     HTML5WebView mWebView;
     String fileName;
-
-    /*private LinearLayout mContentView;
-    private FrameLayout mCustomViewContainer;
-    private WebChromeClient.CustomViewCallback mCustomViewCallback;
-    FrameLayout.LayoutParams COVER_SCREEN_GRAVITY_CENTER = new FrameLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.CENTER);*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,31 +50,30 @@ public class MainActivity extends Activity {
         registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
         //Old Site
-        //mWebView.loadUrl("http://kurogo.artuvic.com:8010/home/");
-        mWebView.loadUrl("http://m.msbm-uwi.org/");
+        mWebView.loadUrl("http://kurogo.artuvic.com:8010/home/");
+        //mWebView.loadUrl("http://m.msbm-uwi.org/");
         setContentView(mWebView.getLayout());
 
        /* // Adds Progress bar Support
-        this.getWindow().requestFeature(Window.FEATURE_PROGRESS);
-        setContentView(R.layout.activity_main);
-        // Makes Progress bar Visible
-        getWindow().setFeatureInt( Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON);
+        final ProgressDialog progressDialog = new ProgressDialog(activity);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        //progressDialog.setCancelable(false);
 
-        // Sets the Chrome Client, and defines the onProgressChanged
-        // This makes the Progress bar be updated.
-        final Activity MyActivity = this;
         mWebView.setWebChromeClient(new WebChromeClient() {
-            public void onProgressChanged(WebView view, int progress)
-            {
-                //Make the bar disappear after URL is loaded, and changes string to Loading...
-                MyActivity.setTitle("Loading...");
-                MyActivity.setProgress(progress * 100); //Make the bar disappear after URL is loaded
 
-                // Return the app name after finish loading
-                if(progress == 100)
-                    MyActivity.setTitle(R.string.app_name);
+            public void onProgressChanged(WebView view, int progress) {
+                progressDialog.show();
+                progressDialog.setProgress(0);
+                activity.setProgress(progress * 1000);
+
+                progressDialog.incrementProgressBy(progress);
+
+                if(progress == 100 && progressDialog.isShowing())
+                    progressDialog.dismiss();
             }
-        });*/
+
+
+        }); */
 
 
     }
@@ -196,7 +174,7 @@ public class MainActivity extends Activity {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             //Toast.makeText(this,mWebView.getUrl(),Toast.LENGTH_LONG).show();
              if (mWebView.canGoBack()) {
-                if (mWebView.getUrl().contains("kurogo.artuvic.com:8010/home")) {
+                if (mWebView.getUrl().contains("kurogo.artuvic.com:8010/home")||mWebView.getUrl().contains("file:///android_asset/index.html")) {
                     new AlertDialog.Builder(this)
                             .setTitle("Exit!")
                             .setMessage("Are you sure you want to close?")
