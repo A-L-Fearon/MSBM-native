@@ -3,11 +3,11 @@
     package="com.aquilibra.xavier.msbm" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:hardwareAccelerated="true"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/newicon"
         android:label="Mona School of Business and Management"
         android:theme="@style/AppTheme" >
@@ -24,6 +24,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ImageDialog"
+            android:label="@string/title_activity_image_dialog"
+            android:theme="@style/Theme.Transparent" >
         </activity>
     </application>
 

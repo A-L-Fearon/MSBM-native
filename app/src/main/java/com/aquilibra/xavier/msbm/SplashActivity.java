@@ -19,8 +19,10 @@ public class SplashActivity extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashActivity.this,MainActivity.class);
-                SplashActivity.this.startActivity(intent);
+                Intent intent1 = new Intent(SplashActivity.this,MainActivity.class);
+                Intent intent2 = new Intent(SplashActivity.this,ImageDialog.class);
+                SplashActivity.this.startActivity(intent1);
+                SplashActivity.this.startActivity(intent2);
                 SplashActivity.this.finish();
             }
         },5000);
