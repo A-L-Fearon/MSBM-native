@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -27,7 +26,7 @@ public class ImageDialog extends Activity {
 
         final WebView adView = new WebView(this);
 
-        String url = "http://138studentliving.com/wp-content/uploads/2015/03/site_logo1.png";
+        String url = "http://www.mona.uwi.edu/msbm/sites/default/files/msbm/images/msbmobilead.png";
 
 
         String data = "<head><style type='text/css'>body{margin:auto auto;text-align:center;} img{width:100%25;} </style>" +

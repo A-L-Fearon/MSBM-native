@@ -265,6 +265,13 @@ public class MainActivity extends Activity {
             }
         };
 
+    @Override
+    protected void onStop()
+    {
+        unregisterReceiver(onComplete);
+        super.onStop();
+    }
+
 }
 
 
