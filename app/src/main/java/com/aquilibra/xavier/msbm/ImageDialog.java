@@ -51,6 +51,7 @@ public class ImageDialog extends Activity {
                 ImageDialog.this.finish();
             }
         });
+        alert.setCancelable(false);
         alert.show();
 
     }

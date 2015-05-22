@@ -121,11 +121,13 @@ public class HTML5WebView extends WebView {
             mCustomView = view;
             mCustomViewCallback = callback;
             mCustomViewContainer.setVisibility(View.VISIBLE);
+
+
         }
 
         @Override
         public void onHideCustomView() {
-            System.out.println("customview hideeeeeeeeeeeeeeeeeeeeeeeeeee");
+            //System.out.println("customview hideeeeeeeeeeeeeeeeeeeeeeeeeee");
             if (mCustomView == null)
                 return;        
 
