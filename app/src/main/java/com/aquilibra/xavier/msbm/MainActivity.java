@@ -5,11 +5,13 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -31,6 +33,7 @@ public class MainActivity extends Activity {
 
     HTML5WebView mWebView;
     String fileName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +140,22 @@ public class MainActivity extends Activity {
             mWebView.loadUrl("file:///android_asset/index.html");
         }
 
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon)
+        {
+           // pd.show();
+            pd.setCancelable(true);
+        }
+
+        final ProgressDialog pd = ProgressDialog.show(MainActivity.this, "", "Loading...", true);
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+
+            if (pd.isShowing()) {
+                pd.dismiss();
+            }
+        }
 
     }
 

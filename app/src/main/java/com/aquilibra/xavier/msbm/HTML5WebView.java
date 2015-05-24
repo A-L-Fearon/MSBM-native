@@ -29,18 +29,19 @@ public class HTML5WebView extends WebView {
     private FrameLayout                         mBrowserFrameLayout;
     private FrameLayout                         mLayout;
 
-    Activity a;
-    ProgressDialog progressDialog;
+    //Activity a;
+    //ProgressDialog progressDialog;
 
     static final String LOGTAG = "HTML5WebView";
 
     private void init(Context context) {
         mContext = context;     
-        a = (Activity) mContext;
+       // a = (Activity) mContext;
 
         mLayout = new FrameLayout(context);
 
-        mBrowserFrameLayout = (FrameLayout) LayoutInflater.from(a).inflate(R.layout.custom_screen, null);
+        mBrowserFrameLayout = (FrameLayout) LayoutInflater.from(mContext).inflate(R.layout.custom_screen, null);
+        //mBrowserFrameLayout = (FrameLayout) LayoutInflater.from(a).inflate(R.layout.custom_screen, null);
         mContentView = (FrameLayout) mBrowserFrameLayout.findViewById(R.id.main_content);
         mCustomViewContainer = (FrameLayout) mBrowserFrameLayout.findViewById(R.id.fullscreen_custom_content);
 
@@ -69,9 +70,9 @@ public class HTML5WebView extends WebView {
 
         mContentView.addView(this);
 
-        //For Progress Dialog
+      /*  //For Progress Dialog
         progressDialog = new ProgressDialog(a);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL); */
     }
 
     public HTML5WebView(Context context) {
@@ -166,7 +167,7 @@ public class HTML5WebView extends WebView {
          @Override
          public void onProgressChanged(WebView view, int newProgress) {
             ((Activity) mContext).getWindow().setFeatureInt(Window.FEATURE_PROGRESS, newProgress * 100);
-             // Functionality for Progress Dialog
+           /*  // Functionality for Progress Dialog
              progressDialog.show();
              progressDialog.setProgress(0);
              a.setProgress(newProgress * 1000);
@@ -175,7 +176,7 @@ public class HTML5WebView extends WebView {
 
              if(newProgress == 100 && progressDialog.isShowing()){
                  progressDialog.dismiss();
-            }
+            } */
          }
 
          @Override
