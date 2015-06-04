@@ -16,9 +16,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.DownloadListener;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -27,6 +29,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 public class MainActivity extends Activity {
@@ -74,6 +78,56 @@ public class MainActivity extends Activity {
 
 
         }); */
+
+        //Start ImageDialog after check
+        //Test to see if Status if 200 or 404
+        new Thread() {
+
+            public void run() {
+                //your "file checking code" goes here like this
+                //write your results to log cat, since you cant do Toast from threads without handlers also...
+
+                int status;
+                try {
+                    HttpURLConnection.setFollowRedirects(false);
+                    // note : you may also need
+                    //HttpURLConnection.setInstanceFollowRedirects(false)
+
+                    HttpURLConnection con = (HttpURLConnection) new URL("http://www.mona.uwi.edu/msbm/sites/default/files/msbm/images/msbmobilead.png").openConnection();
+                    con.setRequestMethod("HEAD");
+                    status = con.getResponseCode();
+                    final int finalStatus = status;
+                    /*ImageDialog.this.runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            //Do your UI operations like dialog opening or Toast here
+                            Toast.makeText(getApplicationContext(), "" + finalStatus, Toast.LENGTH_LONG).show();
+                        }
+                    });*/
+
+                    if ((con.getResponseCode() == HttpURLConnection.HTTP_OK)) {
+                        MainActivity.this.runOnUiThread(new Runnable()
+                        {
+                            public void run()
+                            {
+                                //Do your UI operations like dialog opening or Toast here
+                                Intent intent = new Intent(MainActivity.this,ImageDialog.class);
+                                MainActivity.this.startActivity(intent);
+                            }
+                        });
+
+                    }
+                    else {
+                        Log.d("FILE_EXISTS", "false");
+                    }
+                    //Toast.makeText(getApplicationContext(),"" + con.getResponseCode(),Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    // Toast.makeText(getApplicationContext(), "" + status, Toast.LENGTH_LONG).show();
+                    Log.d("ERROR_FILE_EXISTS", "false");
+                }
+            }
+        }.start();
 
 
     }
@@ -289,7 +343,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onStop()
     {
-        unregisterReceiver(onComplete);
+        try {
+            unregisterReceiver(onComplete);
+        }catch (Exception e){
+
+        }
         super.onStop();
     }
 
