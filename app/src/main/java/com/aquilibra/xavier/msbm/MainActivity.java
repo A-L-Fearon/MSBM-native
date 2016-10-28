@@ -54,8 +54,8 @@ public class MainActivity extends Activity {
         registerReceiver(onComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
 
         //Old Site
-        mWebView.loadUrl("http://kurogo.artuvic.com:8010/home/");
-        //mWebView.loadUrl("http://m.msbm-uwi.org/");
+//        mWebView.loadUrl("http://kurogo.artuvic.com:8010/home/");
+        mWebView.loadUrl("http://m.msbm-uwi.org/");
         setContentView(mWebView.getLayout());
 
        /* // Adds Progress bar Support
